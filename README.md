@@ -1,46 +1,84 @@
-![Banner image](https://user-images.githubusercontent.com/10284570/173569848-c624317f-42b1-45a6-ab09-f0ea3c247648.png)
+# n8n-nodes-pirate-weather
 
-# n8n-nodes-starter
+This is an n8n community node that provides access to the [Pirate Weather API](https://pirateweather.net/), a free and open-source weather API that serves as an alternative to the Dark Sky API.
 
-This repo contains example nodes to help you get started building your own custom integrations for [n8n](https://n8n.io). It includes the node linter and other dependencies.
+## Features
 
-To make your custom node available to the community, you must create it as an npm package, and [submit it to the npm registry](https://docs.npmjs.com/packages-and-modules/contributing-packages-to-the-registry).
+- **Weather Forecast**: Get current conditions and forecasts up to 7 days
+- **Time Machine**: Access historical weather data
+- **Multiple Units**: Support for US, UK, CA, and SI units
+- **50+ Languages**: Weather summaries in multiple languages
+- **Flexible Data**: Choose which data blocks to include or exclude
+- **Extended Forecasts**: Get hourly forecasts up to 168 hours
 
-## Prerequisites
+## Installation
 
-You need the following installed on your development machine:
+### Community Node (Recommended)
 
-* [git](https://git-scm.com/downloads)
-* Node.js and pnpm. Minimum version Node 20. You can find instructions on how to install both using nvm (Node Version Manager) for Linux, Mac, and WSL [here](https://github.com/nvm-sh/nvm). For Windows users, refer to Microsoft's guide to [Install NodeJS on Windows](https://docs.microsoft.com/en-us/windows/dev-environment/javascript/nodejs-on-windows).
-* Install n8n with:
-  ```
-  npm install n8n -g
-  ```
-* Recommended: follow n8n's guide to [set up your development environment](https://docs.n8n.io/integrations/creating-nodes/build/node-development-environment/).
+1. Go to **Settings > Community Nodes**
+2. Search for `n8n-nodes-pirate-weather`
+3. Click **Install**
 
-## Using this starter
+### Manual Installation
 
-These are the basic steps for working with the starter. For detailed guidance on creating and publishing nodes, refer to the [documentation](https://docs.n8n.io/integrations/creating-nodes/).
-
-1. [Generate a new repository](https://github.com/n8n-io/n8n-nodes-starter/generate) from this template repository.
-2. Clone your new repo:
+1. Navigate to your n8n installation directory
+2. Run:
+   ```bash
+   npm install n8n-nodes-pirate-weather
    ```
-   git clone https://github.com/<your organization>/<your-repo-name>.git
-   ```
-3. Run `npm i` to install dependencies.
-4. Open the project in your editor.
-5. Browse the examples in `/nodes` and `/credentials`. Modify the examples, or replace them with your own nodes.
-6. Update the `package.json` to match your details.
-7. Run `npm lint` to check for errors or `npm lintfix` to automatically fix errors when possible.
-8. Test your node locally. Refer to [Run your node locally](https://docs.n8n.io/integrations/creating-nodes/test/run-node-locally/) for guidance.
-9. Replace this README with documentation for your node. Use the [README_TEMPLATE](README_TEMPLATE.md) to get started.
-10. Update the LICENSE file to use your details.
-11. [Publish](https://docs.npmjs.com/packages-and-modules/contributing-packages-to-the-registry) your package to npm.
+3. Restart n8n
 
-## More information
+## Authentication
 
-Refer to our [documentation on creating nodes](https://docs.n8n.io/integrations/creating-nodes/) for detailed information on building your own nodes.
+This node requires a Pirate Weather API key:
+
+1. Sign up for a free API key at [pirate-weather.apiable.io](https://pirate-weather.apiable.io/)
+2. In n8n, create new Pirate Weather API credentials
+3. Enter your API key
+
+## Usage
+
+### Weather Forecast
+
+Get current weather conditions and forecasts:
+
+- **Latitude & Longitude**: Location coordinates
+- **Units**: Choose between auto, CA, UK, US, or SI
+- **Exclude**: Remove unwanted data blocks (currently, minutely, hourly, daily, alerts)
+- **Extend**: Get hourly forecasts for 168 hours instead of 48
+- **Language**: Get summaries in your preferred language
+
+### Time Machine
+
+Query historical weather data:
+
+- **Time**: Specify the date/time for historical data
+- Supports UNIX timestamps and ISO 8601 formats
+- Limited to available historical data
+
+## Example Workflows
+
+### Basic Weather Forecast
+```
+1. Pirate Weather node
+2. Set coordinates (e.g., 37.8267, -122.4233)
+3. Execute to get current weather
+```
+
+### Daily Weather Alert
+```
+1. Schedule Trigger (daily at 7 AM)
+2. Pirate Weather node (get forecast)
+3. IF node (check for rain)
+4. Send notification if rain expected
+```
+
+## Resources
+
+- [Pirate Weather API Documentation](https://docs.pirateweather.net/en/latest/)
+- [n8n Community Forum](https://community.n8n.io/)
+- [Report Issues](https://github.com/ChadMoran/n8n-nodes-pirate-weather/issues)
 
 ## License
 
-[MIT](https://github.com/n8n-io/n8n-nodes-starter/blob/master/LICENSE.md)
+MIT
