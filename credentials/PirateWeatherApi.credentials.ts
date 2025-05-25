@@ -34,7 +34,7 @@ export class PirateWeatherApi implements ICredentialType {
 	test: ICredentialTestRequest = {
 		request: {
 			baseURL: 'https://api.pirateweather.net',
-			url: '=/forecast/{{$credentials.apiKey}}/37.8267,-122.4233',
+			url: '/forecast/{{$credentials.apiKey}}/37.8267,-122.4233',
 		},
 	};
 }

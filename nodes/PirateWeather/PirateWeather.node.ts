@@ -68,7 +68,7 @@ export class PirateWeather implements INodeType {
 						routing: {
 							request: {
 								method: 'GET',
-								url: '=/forecast/{{$credentials.apiKey}}/{{$parameter.latitude}},{{$parameter.longitude}}',
+								url: '/forecast/{{$credentials.apiKey}}/{{$parameter.latitude}},{{$parameter.longitude}}',
 								qs: {
 									units: '={{$parameter.additionalFields.units || undefined}}',
 									exclude: '={{$parameter.additionalFields.exclude?.join(",") || undefined}}',
@@ -102,7 +102,7 @@ export class PirateWeather implements INodeType {
 						routing: {
 							request: {
 								method: 'GET',
-								url: '=/forecast/{{$credentials.apiKey}}/{{$parameter.latitude}},{{$parameter.longitude}},{{Math.floor(new Date($parameter.time).getTime() / 1000)}}',
+								url: '/forecast/{{$credentials.apiKey}}/{{$parameter.latitude}},{{$parameter.longitude}},{{Math.floor(new Date($parameter.time).getTime() / 1000)}}',
 								qs: {
 									units: '={{$parameter.additionalFields.units || undefined}}',
 									exclude: '={{$parameter.additionalFields.exclude?.join(",") || undefined}}',
