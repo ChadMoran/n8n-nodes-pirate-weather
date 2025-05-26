@@ -1,0 +1,238 @@
+{
+  "name": "Pirate Weather Test Workflow",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "c44da9b1-8e2d-4316-b3c0-e3b35dba756f",
+      "name": "When clicking \"Execute Workflow\"",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        420,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "forecast",
+        "operation": "getForecast",
+        "latitude": 40.7128,
+        "longitude": -74.0060,
+        "additionalFields": {
+          "units": "auto"
+        }
+      },
+      "id": "a2b3c4d5-e6f7-8910-1112-131415161718",
+      "name": "NYC Weather Forecast",
+      "type": "n8n-nodes-pirateweather.pirateWeather",
+      "typeVersion": 1,
+      "position": [
+        620,
+        220
+      ],
+      "credentials": {
+        "pirateWeatherApi": {
+          "id": "1",
+          "name": "Pirate Weather API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "forecast",
+        "operation": "getForecast",
+        "latitude": 51.5074,
+        "longitude": -0.1278,
+        "additionalFields": {
+          "units": "si",
+          "exclude": ["minutely", "alerts"],
+          "extend": "hourly"
+        }
+      },
+      "id": "b3c4d5e6-f781-9101-1121-314151617181",
+      "name": "London Weather (SI Units)",
+      "type": "n8n-nodes-pirateweather.pirateWeather",
+      "typeVersion": 1,
+      "position": [
+        620,
+        380
+      ],
+      "credentials": {
+        "pirateWeatherApi": {
+          "id": "1",
+          "name": "Pirate Weather API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "timeMachine",
+        "operation": "getHistorical",
+        "latitude": 35.6762,
+        "longitude": 139.6503,
+        "time": "={{ $now.minus({days: 7}).toISO() }}",
+        "additionalFields": {
+          "units": "auto"
+        }
+      },
+      "id": "c4d5e6f7-8191-0111-2131-415161718191",
+      "name": "Tokyo Historical Weather (7 days ago)",
+      "type": "n8n-nodes-pirateweather.pirateWeather",
+      "typeVersion": 1,
+      "position": [
+        620,
+        540
+      ],
+      "credentials": {
+        "pirateWeatherApi": {
+          "id": "1",
+          "name": "Pirate Weather API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "// Extract key weather data from the forecast\nconst weather = $input.item.json;\n\n// Check if we have weather data\nif (!weather || !weather.currently) {\n  return {\n    error: 'No weather data received',\n    location: `${weather.latitude}, ${weather.longitude}`\n  };\n}\n\n// Extract current conditions\nconst current = weather.currently;\nconst alerts = weather.alerts || [];\n\nreturn {\n  location: {\n    latitude: weather.latitude,\n    longitude: weather.longitude,\n    timezone: weather.timezone\n  },\n  current: {\n    temperature: current.temperature,\n    apparentTemperature: current.apparentTemperature,\n    summary: current.summary,\n    icon: current.icon,\n    precipProbability: current.precipProbability,\n    windSpeed: current.windSpeed,\n    humidity: current.humidity,\n    pressure: current.pressure,\n    uvIndex: current.uvIndex\n  },\n  alerts: alerts.map(alert => ({\n    title: alert.title,\n    severity: alert.severity,\n    expires: new Date(alert.expires * 1000).toISOString()\n  })),\n  daily: weather.daily?.data?.[0] || null,\n  hourly: weather.hourly?.data?.slice(0, 6) || []\n};"
+      },
+      "id": "d5e6f781-9101-1121-3141-516171819202",
+      "name": "Process Weather Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        820,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "errorMessage",
+              "value": "={{ $json.error?.message || 'Unknown error occurred' }}"
+            },
+            {
+              "name": "errorCode",
+              "value": "={{ $json.error?.code || 'UNKNOWN' }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "e6f78191-0111-2131-4151-617181920213",
+      "name": "Handle Errors",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        1020,
+        380
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.error !== undefined }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "f7819101-1121-3141-5161-718192021324",
+      "name": "Check for Errors",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        820,
+        380
+      ]
+    }
+  ],
+  "connections": {
+    "When clicking \"Execute Workflow\"": {
+      "main": [
+        [
+          {
+            "node": "NYC Weather Forecast",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "London Weather (SI Units)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Tokyo Historical Weather (7 days ago)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "NYC Weather Forecast": {
+      "main": [
+        [
+          {
+            "node": "Process Weather Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "London Weather (SI Units)": {
+      "main": [
+        [
+          {
+            "node": "Check for Errors",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tokyo Historical Weather (7 days ago)": {
+      "main": [
+        [
+          {
+            "node": "Check for Errors",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check for Errors": {
+      "main": [
+        [
+          {
+            "node": "Process Weather Data",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Handle Errors",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "saveDataSuccessExecution": "all",
+    "saveExecutionProgress": "DEFAULT",
+    "saveManualExecutions": true,
+    "executionTimeout": -1
+  },
+  "staticData": null,
+  "pinData": {},
+  "versionId": "9b7a8c3d-4e5f-6789-0123-456789abcdef",
+  "triggerCount": 0,
+  "tags": []
+}

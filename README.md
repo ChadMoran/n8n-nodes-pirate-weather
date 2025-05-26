@@ -73,6 +73,54 @@ Query historical weather data:
 4. Send notification if rain expected
 ```
 
+## Development
+
+To test this node locally during development:
+
+1. **Clone and install dependencies**
+   ```bash
+   git clone https://github.com/ChadMoran/n8n-nodes-pirate-weather.git
+   cd n8n-nodes-pirate-weather
+   npm install
+   ```
+
+2. **Link the node locally**
+   ```bash
+   npm run link:local
+   ```
+   Then in your n8n installation directory:
+   ```bash
+   npm link n8n-nodes-pirate-weather
+   ```
+
+3. **Start development mode**
+   ```bash
+   npm run dev
+   ```
+   This will watch for code changes and run n8n.
+
+4. **Remove the local link when done**
+   ```bash
+   npm run link:remove
+   ```
+
+### Available Scripts
+
+- `npm run build` - Build the node for production
+- `npm run dev` - Run TypeScript compiler and n8n in watch mode
+- `npm run lint` - Check code style
+- `npm run lintfix` - Fix code style issues
+- `npm run link:local` - Create local npm link for testing
+- `npm run link:remove` - Remove local npm link
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/amazing-feature`
+3. Commit changes: `git commit -m 'Add amazing feature'`
+4. Push to branch: `git push origin feature/amazing-feature`
+5. Open a Pull Request
+
 ## Resources
 
 - [Pirate Weather API Documentation](https://docs.pirateweather.net/en/latest/)

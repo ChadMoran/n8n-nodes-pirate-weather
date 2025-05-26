@@ -23,18 +23,20 @@ export class PirateWeatherApi implements ICredentialType {
 		},
 	];
 
-	// The API key is passed in the URL path, not as a query parameter
+	// Pass API key in the ApiKey header instead of URL path
 	authenticate: IAuthenticateGeneric = {
 		type: 'generic',
 		properties: {
-			// No auth needed here since API key is in the URL path
+			headers: {
+				'ApiKey': '={{$credentials.apiKey}}',
+			},
 		},
 	};
 
 	test: ICredentialTestRequest = {
 		request: {
 			baseURL: 'https://api.pirateweather.net',
-			url: '/forecast/{{$credentials.apiKey}}/37.8267,-122.4233',
+			url: '/forecast/dummy/37.8267,-122.4233',
 		},
 	};
 }

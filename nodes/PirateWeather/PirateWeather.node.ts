@@ -68,7 +68,7 @@ export class PirateWeather implements INodeType {
 						routing: {
 							request: {
 								method: 'GET',
-								url: '/forecast/{{$credentials.apiKey}}/{{$parameter.latitude}},{{$parameter.longitude}}',
+								url: '=/forecast/dummy/{{$parameter["latitude"]}},{{$parameter["longitude"]}}',
 								qs: {
 									units: '={{$parameter.additionalFields.units || undefined}}',
 									exclude: '={{$parameter.additionalFields.exclude?.join(",") || undefined}}',
@@ -102,7 +102,7 @@ export class PirateWeather implements INodeType {
 						routing: {
 							request: {
 								method: 'GET',
-								url: '/forecast/{{$credentials.apiKey}}/{{$parameter.latitude}},{{$parameter.longitude}},{{Math.floor(new Date($parameter.time).getTime() / 1000)}}',
+								url: '=/forecast/dummy/{{$parameter["latitude"]}},{{$parameter["longitude"]}},{{Math.floor(new Date($parameter["time"]).getTime() / 1000)}}',
 								qs: {
 									units: '={{$parameter.additionalFields.units || undefined}}',
 									exclude: '={{$parameter.additionalFields.exclude?.join(",") || undefined}}',
@@ -158,7 +158,7 @@ export class PirateWeather implements INodeType {
 				displayOptions: {
 					show: {
 						resource: ['timeMachine'],
-						operation: ['get'],
+						operation: ['getHistorical'],
 					},
 				},
 			},
@@ -177,58 +177,29 @@ export class PirateWeather implements INodeType {
 				},
 				options: [
 					{
-						displayName: 'Units',
-						name: 'units',
-						type: 'options',
-						options: [
-							{
-								name: 'Auto (Based on Location)',
-								value: 'auto',
-							},
-							{
-								name: 'CA (SI, km/h)',
-								value: 'ca',
-							},
-							{
-								name: 'UK (SI, mph)',
-								value: 'uk',
-							},
-							{
-								name: 'US (Imperial)',
-								value: 'us',
-							},
-							{
-								name: 'SI',
-								value: 'si',
-							},
-						],
-						default: 'auto',
-						description: 'Units for the weather data',
-					},
-					{
 						displayName: 'Exclude',
 						name: 'exclude',
 						type: 'multiOptions',
 						options: [
 							{
+								name: 'Alerts',
+								value: 'alerts',
+							},
+							{
 								name: 'Currently',
 								value: 'currently',
-							},
-							{
-								name: 'Minutely',
-								value: 'minutely',
-							},
-							{
-								name: 'Hourly',
-								value: 'hourly',
 							},
 							{
 								name: 'Daily',
 								value: 'daily',
 							},
 							{
-								name: 'Alerts',
-								value: 'alerts',
+								name: 'Hourly',
+								value: 'hourly',
+							},
+							{
+								name: 'Minutely',
+								value: 'minutely',
 							},
 						],
 						default: [],
@@ -244,12 +215,29 @@ export class PirateWeather implements INodeType {
 								value: '',
 							},
 							{
-								name: 'Hourly (168 hours)',
+								name: 'Hourly (168 Hours)',
 								value: 'hourly',
 							},
 						],
 						default: '',
 						description: 'Extend the hourly forecast',
+					},
+					{
+						displayName: 'Icon Style',
+						name: 'icon',
+						type: 'options',
+						options: [
+							{
+								name: 'Default',
+								value: '',
+							},
+							{
+								name: 'Pirate (Expanded Set)',
+								value: 'pirate',
+							},
+						],
+						default: '',
+						description: 'Icon style for weather conditions',
 					},
 					{
 						displayName: 'Language',
@@ -291,6 +279,35 @@ export class PirateWeather implements INodeType {
 						description: 'Language for text summaries',
 					},
 					{
+						displayName: 'Units',
+						name: 'units',
+						type: 'options',
+						options: [
+							{
+								name: 'Auto (Based on Location)',
+								value: 'auto',
+							},
+							{
+								name: 'CA (SI, Km/h)',
+								value: 'ca',
+							},
+							{
+								name: 'SI',
+								value: 'si',
+							},
+							{
+								name: 'UK (SI, Mph)',
+								value: 'uk',
+							},
+							{
+								name: 'US (Imperial)',
+								value: 'us',
+							},
+						],
+						default: 'auto',
+						description: 'Units for the weather data',
+					},
+					{
 						displayName: 'Version',
 						name: 'version',
 						type: 'options',
@@ -306,23 +323,6 @@ export class PirateWeather implements INodeType {
 						],
 						default: '',
 						description: 'API version (v2 includes additional fields like smoke and fireIndex)',
-					},
-					{
-						displayName: 'Icon Style',
-						name: 'icon',
-						type: 'options',
-						options: [
-							{
-								name: 'Default',
-								value: '',
-							},
-							{
-								name: 'Pirate (Expanded Set)',
-								value: 'pirate',
-							},
-						],
-						default: '',
-						description: 'Icon style for weather conditions',
 					},
 				],
 			},

@@ -1,6 +1,6 @@
 {
 	"name": "n8n-nodes-pirate-weather",
-	"version": "0.1.1",
+	"version": "0.9.0",
 	"description": "n8n node for Pirate Weather API - A free weather API alternative",
 	"keywords": [
 		"n8n-community-node-package",
@@ -30,7 +30,12 @@
 		"format": "prettier nodes credentials --write",
 		"lint": "eslint nodes credentials package.json",
 		"lintfix": "eslint nodes credentials package.json --fix",
-		"prepublishOnly": "npm run build"
+		"prepublishOnly": "npm run build",
+		"link:local": "npm run build && npm link && echo 'Node linked! In your n8n directory, run: npm link n8n-nodes-pirate-weather'",
+		"link:remove": "npm unlink -g n8n-nodes-pirate-weather && echo 'Node unlinked successfully'",
+		"dev": "npm-run-all --parallel dev:build dev:n8n",
+		"dev:build": "tsc --watch",
+		"dev:n8n": "n8n start"
 	},
 	"files": [
 		"dist"
@@ -49,6 +54,7 @@
 		"eslint": "^8.57.0",
 		"eslint-plugin-n8n-nodes-base": "^1.16.3",
 		"gulp": "^5.0.0",
+		"npm-run-all": "^4.1.5",
 		"prettier": "^3.5.3",
 		"typescript": "^5.8.2"
 	},
