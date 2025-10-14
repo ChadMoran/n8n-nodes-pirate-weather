@@ -39,7 +39,7 @@ export class PirateWeatherApi implements ICredentialType {
 			headers: {
 				'ApiKey': '={{$credentials.apiKey}}',
 			},
-			url: '/forecast/dummy/37.8267,-122.4233',
+			url: '/forecast/37.8267,-122.4233',
 		},
 	};
 }
