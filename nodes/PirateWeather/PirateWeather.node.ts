@@ -1,4 +1,4 @@
-import { INodeType, INodeTypeDescription, NodeConnectionType } from 'n8n-workflow';
+import { INodeType, INodeTypeDescription, NodeConnectionTypes } from 'n8n-workflow';
 
 export class PirateWeather implements INodeType {
 	description: INodeTypeDescription = {
@@ -12,8 +12,8 @@ export class PirateWeather implements INodeType {
 		defaults: {
 			name: 'Pirate Weather',
 		},
-		inputs: [NodeConnectionType.Main],
-		outputs: [NodeConnectionType.Main],
+		inputs: [NodeConnectionTypes.Main],
+		outputs: [NodeConnectionTypes.Main],
 		credentials: [
 			{
 				name: 'pirateWeatherApi',
